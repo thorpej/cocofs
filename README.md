@@ -8,7 +8,7 @@ but here are the basics:
 
 - single-sided (1 track-per-cylinder), double-density
 - 35 cylinders (numbered 0 - 34)
-- 18 sectors-per-cylinder (numbered 1 - 18)
+- 18 sectors-per-track (numbered 1 - 18)
 - 256 bytes-per-sector
 
 Each cylinder is broken up into 2 "granules" of 9 sectors.  The granule is the file system's
