@@ -35,8 +35,8 @@ form.  Some ideas for future enhancements:
 - rename functionality -- the ability to rename files in the file system
 - support for more disk image formats
 
-cocofs should be extremely portable to any Unix-like system with a C99 compiler, although
-I haven't proved this myself.  Please let me know if you have issues building it on your
-system.
+cocofs should be extremely portable to any Unix-like system with a C99 compiler, and can also be
+built for Windows using MinGW-w64 (see [Makefile](Makefile) for details).  Please let me know if
+you have issues building it on your system.
 
 If you're intrested in contributing, please do!  In any case, I hope you find this tool useful!
