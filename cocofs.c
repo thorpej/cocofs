@@ -545,6 +545,29 @@ cocofs_dir_set_lastbytes(unsigned int cnt, uint8_t *lastbytes)
 	lastbytes[1] = (uint8_t)cnt;
 }
 
+/*
+ * We provide our own versions of pread() and pwrite() in order to
+ * improve code portability.
+ */
+
+static ssize_t
+cocofs_pread(int d, void *buf, size_t nbyte, off_t offset)
+{
+	if (lseek(d, offset, SEEK_SET) == -1) {
+		return -1;
+	}
+	return read(d, buf, nbyte);
+}
+
+static ssize_t
+cocofs_pwrite(int d, const void *buf, size_t nbyte, off_t offset)
+{
+	if (lseek(d, offset, SEEK_SET) == -1) {
+		return -1;
+	}
+	return write(d, buf, nbyte);
+}
+
 static struct cocofs *
 cocofs_alloc(int fd)
 {
@@ -604,7 +627,7 @@ cocofs_load(int fd)
 	int i;
 
 	/* Read in the image. */
-	rv = pread(fd, fs->image_data, COCOFS_TOTALSIZE, 0);
+	rv = cocofs_pread(fd, fs->image_data, COCOFS_TOTALSIZE, 0);
 	if (rv == -1) {
 		fprintf(stderr, "ERROR: unable to read image: %s\n",
 		    strerror(errno));
@@ -630,7 +653,7 @@ cocofs_save(const struct cocofs *fs)
 {
 	ssize_t rv;
 
-	rv = pwrite(fs->fd, fs->image_data, COCOFS_TOTALSIZE, 0);
+	rv = cocofs_pwrite(fs->fd, fs->image_data, COCOFS_TOTALSIZE, 0);
 	if (rv != COCOFS_TOTALSIZE) {
 		fprintf(stderr, "ERROR: unable to write image data: %s\n",
 		    strerror(errno));
@@ -1088,7 +1111,8 @@ cocofs_copyin(struct cocofs *fs, const char *infile, const char name[8],
 		g = glist[gi];
 		assert(fs->granule_map[g] == GMAP_ALLOCATED);
 		buf = fs->image_data + cocofs_granule_to_offset(g);
-		rv = pread(infd, buf, cursz, gi * COCOFS_BYTES_PER_GRANULE);
+		rv = cocofs_pread(infd, buf, cursz,
+				  gi * COCOFS_BYTES_PER_GRANULE);
 		if (rv != cursz) {
 			fprintf(stderr, "failed to read %s\n", infile);
 			goto bad;
