@@ -635,8 +635,8 @@ cocofs_load(int fd)
 		return NULL;
 	}
 	if (rv < COCOFS_TOTALSIZE) {
-		fprintf(stderr, "WARNING: read only %zd byte%s of image data\n",
-		    rv, plural(rv));
+		fprintf(stderr, "WARNING: read only %ld byte%s of image data\n",
+		    (long)rv, plural(rv));
 	}
 
 	for (i = 0; i < COCOFS_NGRANULES; i++) {
