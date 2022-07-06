@@ -1269,12 +1269,19 @@ cmd_copyout(struct cocofs *fs, int argc, char *argv[])
 			continue;
 		}
 		cocofs_stat(fs, dir, &st);
+		/*
+		 * N.B. cocofs_stat() guarantees that st.st_name will
+		 * never exceed 8 bytes and that st.st_ext will never
+		 * exceed 3 bytes.  This means that the 13 byte buffer
+		 * allocated above will be sufficient for all possible
+		 * inputs, and thus strcpy() and sprintf() will be safe
+		 * to use.  (This improves the portability of the code.)
+		 */
 		if (st.st_ext[0] == '\0') {
 			/* No extension. */
-			strlcpy(outfname, st.st_name, sizeof(outfname));
+			strcpy(outfname, st.st_name);
 		} else {
-			snprintf(outfname, sizeof(outfname), "%s.%s",
-			    st.st_name, st.st_ext);
+			sprintf(outfname, "%s.%s", st.st_name, st.st_ext);
 		}
 		if (! cocofs_copyout(fs, dir, outfname)) {
 			retval = EXIT_FAILURE;
