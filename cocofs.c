@@ -673,7 +673,7 @@ static struct cocofs_dirent *
 cocofs_lookup_raw(struct cocofs *fs, const char *name, const char *ext)
 {
 	struct cocofs_dirent *dir;
-	int i;
+	unsigned int i;
 
 	for (i = 0; i < COCOFS_DIR_TRACK_NENTRIES; i++) {
 		dir = &fs->directory[i];
@@ -780,7 +780,8 @@ cocofs_enumerate_directory(struct cocofs *fs, bool do_dump)
 {
 	struct cocofs_dirent *dir;
 	struct cocofs_stat st;
-	int nfiles = 0, di, gi;
+	int nfiles = 0, gi;
+	unsigned int di;
 	unsigned int free_granules = COCOFS_NGRANULES;
 	unsigned int loopcnt;
 	unsigned int lastbytes;
@@ -1020,7 +1021,7 @@ cocofs_copyin(struct cocofs *fs, const char *infile, const char name[8],
 	unsigned int granules_needed;
 	unsigned int orig_free_granules;
 	unsigned int g, gi;
-	int i;
+	unsigned int i;
 	uint8_t orig_gmap[COCOFS_NGRANULES];
 	uint8_t glist[COCOFS_NGRANULES];
 
@@ -1198,6 +1199,7 @@ cmd_dump(struct cocofs *fs, int argc, char *argv[])
 	if (argc != 0) {
 		return usage();
 	}
+	(void)argv;
 
 	cocofs_enumerate_directory(fs, true);
 
@@ -1210,6 +1212,7 @@ cmd_format(struct cocofs *fs, int argc, char *argv[])
 	if (argc != 0) {
 		return usage();
 	}
+	(void)argv;
 
 	/* Caller formatted a new image for us. */
 
