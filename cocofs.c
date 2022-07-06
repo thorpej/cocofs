@@ -708,7 +708,7 @@ cocofs_lookup(struct cocofs *fs, const char *lookup)
 	return cocofs_lookup_raw(fs, name, ext);
 }
 
-void
+static void
 cocofs_stat(const struct cocofs *fs, const struct cocofs_dirent *dir,
     struct cocofs_stat *st)
 {
@@ -1272,7 +1272,7 @@ cmd_rm(struct cocofs *fs, int argc, char *argv[])
 	return retval;
 }
 
-int
+static int
 cmd_copyout(struct cocofs *fs, int argc, char *argv[])
 {
 	if (argc == 0) {
@@ -1315,7 +1315,7 @@ cmd_copyout(struct cocofs *fs, int argc, char *argv[])
 	return retval;
 }
 
-int
+static int
 cmd_copyin(struct cocofs *fs, int argc, char *argv[])
 {
 	if (argc == 0) {

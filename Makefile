@@ -1,4 +1,4 @@
-CFLAGS=		-O1 -g -Wall
+CFLAGS=	-O1 -g -Wall -Wformat -Wstrict-prototypes -Wmissing-prototypes -Werror
 
 CLEANFILES=	cocofs
 
