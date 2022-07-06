@@ -11,9 +11,9 @@ but here are the basics:
 - 18 sectors-per-track (numbered 1 - 18)
 - 256 bytes-per-sector
 
-Each cylinder is broken up into 2 "granules" of 9 sectors.  The granule is the file system's
-allocation unit.  With 35 cylinders, there are a total of 70 granules.  The directory is
-stored in cylinder 17, leaving 68 granules available for file data.
+Each track is broken up into 2 "granules" of 9 sectors.  The granule is the file system's
+allocation unit.  With 35 tracks, there are a total of 70 granules.  The directory is
+stored in track 17, leaving 68 granules available for file data.
 
 cocofs currently supports simple linear disk images that are 161280 bytes in size (35 * 18 * 256).
 These files often have the *.DSK* file name extension.
