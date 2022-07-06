@@ -215,7 +215,7 @@ cocofs_granule_to_offset(unsigned int granule)
 static bool
 gmap_entry_is_valid(uint8_t v)
 {
-	return (v >= 0 && v <= COCOFS_NGRANULES) ||
+	return (v <= COCOFS_NGRANULES) ||
 	       (v >= 0xc0 && v <= 0xc9) ||
 	       v == GMAP_FREE;
 }
