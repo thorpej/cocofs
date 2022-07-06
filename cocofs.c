@@ -1050,7 +1050,7 @@ cocofs_copyin(struct cocofs *fs, const char *infile, const char name[8],
 		goto bad;
 	}
 
-	if ((unsigned int)sb.st_size >
+	if ((unsigned long long)sb.st_size >
 	    fs->free_granules * COCOFS_BYTES_PER_GRANULE) {
 		fprintf(stderr,
 		    "%s: %s\n", infile, strerror(ENOSPC));
