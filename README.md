@@ -18,6 +18,10 @@ stored in track 17, leaving 68 granules available for file data.
 cocofs currently supports simple linear disk images that are 161280 bytes in size (35 * 18 * 256).
 These files often have the *.DSK* file name extension.
 
+cocofs is pretty easy to use.  The general form is:
+
+    cocofs IMAGE.DSK operation
+
 cocofs can perform the following operations:
 
 - format -- create a new disk image
@@ -26,6 +30,38 @@ cocofs can perform the following operations:
 - copyout *file1 [file2 [...]]* -- copy files out of the disk image
 - rm *file1 [file2 [...]]* -- remove files from the disk image
 - dump -- dump information about the disk image, file allocation, etc.
+
+So, for example:
+
+    % cocofs EDTASM++.DSK ls
+    
+      EDTASM++   BIN   10762 bytes (Code, Binary)
+      TRANSFER   BAS     573 bytes (Basic, Binary)
+      EDTASM++   ASM    5138 bytes (Data, ASCII)
+      EDITASM+   BIN   10250 bytes (Code, Binary)
+      EDPATCH    BAS     488 bytes (Basic, Binary)
+      EDLOADER   BAS     430 bytes (Basic, Binary)
+      SUPERED+   BIN   10762 bytes (Code, Binary)
+      SUPERED    BIN   10762 bytes (Code, Binary)
+
+    8 files, 42 granules (96768 bytes) free
+    % cocofs TEST.DSK format
+    % cocofs TEST.DSK ls
+    
+    0 files, 68 granules (156672 bytes) free
+    % cocofs TEST.DSK copyin /path/to/foo.txt
+    % cocofs TEST.DSK ls
+    
+      FOO        TXT      45 bytes (Text, ASCII)
+      
+    1 file, 67 granules (154368 bytes) free
+    % cocofs EDTASM++.DSK copyout transfer.bas
+    % ls -l TRANSFER.BAS
+    4 -rw-r--r--  1 thorpej  wheel  573 Jul  6 16:40 TRANSFER.BAS
+    % strings TRANSFER.BAS | head -2
+    "EDTASM+ SOURCE CODE"
+    "FILE TRANSFER UTILITY"
+    %
 
 This tool isn't super advanced, and could still be improved, but it is useful in its current
 form.  Some ideas for future enhancements:
