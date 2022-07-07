@@ -1177,7 +1177,25 @@ cocofs_copyin(struct cocofs *fs, const char *infile, const char name[8],
 	return false;
 }
 
-static const char myname[] = "cocofs";
+static const char *myname = "cocofs";
+
+static void
+set_myname(const char *argv0)
+{
+	char *cp;
+
+	/* Unix path. */
+	cp = strrchr(argv0, '/');
+	if (cp == NULL) {
+		/* Windows path. */
+		cp = strrchr(argv0, '\\');
+	}
+	if (cp == NULL) {
+		/* stick with the default. */
+		return;
+	}
+	myname = ++cp;	/* advance past the path delimeter */
+}
 
 static int
 usage(void)
@@ -1407,6 +1425,7 @@ main(int argc, char *argv[])
 
 	/* Skip over argv[0]. */
 	assert(argc > 0);
+	set_myname(argv[0]);
 	argc--;
 	argv++;
 
