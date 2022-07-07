@@ -1179,6 +1179,12 @@ cocofs_copyin(struct cocofs *fs, const char *infile, const char name[8],
 
 static const char *myname = "cocofs";
 
+#ifdef COCOFS_VERSION
+#define	STRINGIFY(x)		#x
+#define	STRINGIFY_HARDER(x)	STRINGIFY(x)
+static const char *version = STRINGIFY_HARDER(COCOFS_VERSION);
+#endif
+
 static void
 set_myname(const char *argv0)
 {
@@ -1200,6 +1206,9 @@ set_myname(const char *argv0)
 static int
 usage(void)
 {
+#ifdef COCOFS_VERSION
+	fprintf(stderr, "%s version %s\n", myname, version);
+#endif
 	fprintf(stderr, "usage: %s <image> dump\n", myname);
 	fprintf(stderr, "       %s <image> format\n", myname);
 	fprintf(stderr, "       %s <image> ls [file1 [file2 [...]]]\n", myname);

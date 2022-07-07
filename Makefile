@@ -5,9 +5,13 @@
 #
 # CC=/usr/pkg/cross/x86_64-w64-mingw32/bin/x86_64-w64-mingw32-gcc
 
-CFLAGS=	-O1 -g -Wall -Wextra -Wformat \
-	-Wstrict-prototypes -Wmissing-prototypes \
-	-Werror
+VERSION=1.0
+
+CPPFLAGS=	-DCOCOFS_VERSION=$(VERSION)
+
+CFLAGS=		-O1 -g -Wall -Wextra -Wformat \
+		-Wstrict-prototypes -Wmissing-prototypes \
+		-Werror
 
 CLEANFILES=	cocofs cocofs.exe
 
