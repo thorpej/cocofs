@@ -623,20 +623,50 @@ static struct cocofs *
 cocofs_load(int fd)
 {
 	struct cocofs *fs = cocofs_alloc(fd);
-	ssize_t rv;
+	struct stat sb;
+	ssize_t rsize, rv;
 	int i;
 
+	/* Get the size of the image. */
+	if (fstat(fd, &sb) == -1) {
+		fprintf(stderr, "ERROR: unable to stat image: %s\n",
+		    strerror(errno));
+		cocofs_free(fs);
+		return NULL;
+	}
+
+	/*
+	 * Reject images that are too large.  Compensate for images
+	 * that are too small (assume that the trailing tracks are
+	 * simply left off).
+	 */
+	if (sb.st_size > COCOFS_TOTALSIZE) {
+		fprintf(stderr, "ERROR: image size %lld exceeds max size %u\n",
+		    (long long)sb.st_size, COCOFS_TOTALSIZE);
+		cocofs_free(fs);
+		return NULL;
+	}
+
+	rsize = (ssize_t)sb.st_size;
+	if (sb.st_size < COCOFS_TOTALSIZE) {
+		fprintf(stderr,
+		    "WARNING: image size %ld less than expected size %u\n",
+		    (long)rsize, COCOFS_TOTALSIZE);
+		memset(fs->image_data, 0xff, COCOFS_TOTALSIZE);
+	}
+
 	/* Read in the image. */
-	rv = cocofs_pread(fd, fs->image_data, COCOFS_TOTALSIZE, 0);
+	rv = cocofs_pread(fd, fs->image_data, rsize, 0);
 	if (rv == -1) {
 		fprintf(stderr, "ERROR: unable to read image: %s\n",
 		    strerror(errno));
 		cocofs_free(fs);
 		return NULL;
 	}
-	if (rv < COCOFS_TOTALSIZE) {
-		fprintf(stderr, "WARNING: read only %ld byte%s of image data\n",
-		    (long)rv, plural(rv));
+	if (rv != rsize) {
+		fprintf(stderr,
+		    "WARNING: read only %ld byte%s of image data, "
+		    "expected %ld\n", (long)rv, plural(rv), (long)rsize);
 	}
 
 	for (i = 0; i < COCOFS_NGRANULES; i++) {
