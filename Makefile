@@ -1,6 +1,6 @@
 #
 # You can un-comment this to build for Windows using MinGW-w64.
-# Adjust the path to your WinGW toolchain as needed.  The final
+# Adjust the path to your MinGW toolchain as needed.  The final
 # executable will be named cocofs.exe.
 #
 # CC=/usr/pkg/cross/x86_64-w64-mingw32/bin/x86_64-w64-mingw32-gcc
