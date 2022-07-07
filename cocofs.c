@@ -361,7 +361,7 @@ static const struct str2val cocofs_default_types_and_encodings[] = {
 	{ "H",		(COCOFS_DIRENT_TYPE_DATA << 8) |
 				COCOFS_DIRENT_ENC_ASCII },
 
-	{ NULL },
+	{ NULL,		0 },
 };
 
 static const struct str2val cocofs_dir_types[] = {
@@ -369,13 +369,13 @@ static const struct str2val cocofs_dir_types[] = {
 	{ "Data",	COCOFS_DIRENT_TYPE_DATA },
 	{ "Code",	COCOFS_DIRENT_TYPE_CODE },
 	{ "Text",	COCOFS_DIRENT_TYPE_TEXT },
-	{ NULL },
+	{ NULL,		0 },
 };
 
 static const struct str2val cocofs_dir_encodings[] = {
 	{ "Binary",	COCOFS_DIRENT_ENC_BINARY },
 	{ "ASCII",	COCOFS_DIRENT_ENC_ASCII },
-	{ NULL },
+	{ NULL,		0 },
 };
 
 static const char *
@@ -1422,6 +1422,8 @@ const struct {
 	},
 
 	{
+		NULL,
+		0,
 		NULL,
 	}
 };
