@@ -85,6 +85,11 @@
 #include <string.h>
 #include <unistd.h>
 
+/* We need to use O_BINARY on platforms that have it (Windows). */
+#ifndef O_BINARY
+#define	O_BINARY	0
+#endif
+
 /*
  * Format information is gleaned from:
  *
@@ -947,7 +952,7 @@ cocofs_copyout(const struct cocofs *fs, const struct cocofs_dirent *dir,
 	uint8_t g, gn;
 	int outfd;
 
-	outfd = open(outfname, O_WRONLY | O_CREAT, 0644);
+	outfd = open(outfname, O_WRONLY | O_CREAT | O_BINARY, 0644);
 	if (outfd == -1) {
 		fprintf(stderr, "unable to open output file %s: %s\n",
 		    outfname, strerror(errno));
@@ -1067,7 +1072,7 @@ cocofs_copyin(struct cocofs *fs, const char *infile, const char name[8],
 	 */
 	memset(glist, 0xff, sizeof(glist));
 
-	infd = open(infile, O_RDONLY);
+	infd = open(infile, O_RDONLY | O_BINARY);
 	if (infd == -1) {
 		fprintf(stderr,
 		    "unable to open %s: %s\n", infile, strerror(errno));
@@ -1486,7 +1491,7 @@ main(int argc, char *argv[])
 	}
 
 	/* Open the image (name in argv[0]). */
-	fd = open(argv[0], cmdtab[cmd].oflags, 0644);
+	fd = open(argv[0], cmdtab[cmd].oflags | O_BINARY, 0644);
 	if (fd == -1) {
 		fprintf(stderr, "ERROR: failed to open '%s': %s\n",
 		    argv[0], strerror(errno));
