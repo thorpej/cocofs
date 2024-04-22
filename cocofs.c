@@ -80,6 +80,7 @@
 #include <fcntl.h>
 #include <inttypes.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -536,7 +537,7 @@ cocofs_parse_fname(char *fname, char name[8], char ext[3],
 	return true;
 }
 
-static unsigned int
+static uint16_t
 cocofs_dir_lastbytes(const uint8_t *lastbytes)
 {
 	return (lastbytes[0] << 8) | lastbytes[1];
@@ -770,7 +771,7 @@ cocofs_stat(const struct cocofs *fs, const struct cocofs_dirent *dir,
 	}
 
 	if (last_nsec) {
-		unsigned int lastsec_bytes;
+		uint16_t lastsec_bytes;
 
 		size += last_nsec * COCOFS_BYTES_PER_SEC;
 
@@ -819,7 +820,7 @@ cocofs_enumerate_directory(struct cocofs *fs, bool do_dump)
 	unsigned int di;
 	unsigned int free_granules = COCOFS_NGRANULES;
 	unsigned int loopcnt;
-	unsigned int lastbytes;
+	uint16_t lastbytes;
 	uint8_t g, gn;
 
 	uint8_t gmap_shadow[COCOFS_NGRANULES];
@@ -945,7 +946,7 @@ cocofs_copyout(const struct cocofs *fs, const struct cocofs_dirent *dir,
 {
 	unsigned int loopcnt;
 	unsigned int last_nsec = 0;
-	unsigned int last_nbytes;
+	uint16_t last_nbytes;
 	unsigned int offset;
 	unsigned int gi;
 	ssize_t rv;
@@ -1135,10 +1136,10 @@ cocofs_copyin(struct cocofs *fs, const char *infile, const char name[8],
 	 * each granule has been marked as allocated in the Granule
 	 * Map.
 	 */
-	unsigned int resid, cursz;
+	ssize_t resid, cursz;
 	ssize_t rv;
 	uint8_t *buf;
-	for (gi = 0, resid = (unsigned int)sb.st_size;
+	for (gi = 0, resid = (ssize_t)sb.st_size;
 	     resid != 0; gi++, resid -= cursz) {
 		cursz = resid;
 		if (cursz > COCOFS_BYTES_PER_GRANULE) {

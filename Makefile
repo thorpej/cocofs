@@ -5,7 +5,7 @@
 #
 # CC=/usr/pkg/cross/x86_64-w64-mingw32/bin/x86_64-w64-mingw32-gcc
 
-VERSION=1.0
+VERSION=1.0.1
 
 CPPFLAGS=	-DCOCOFS_VERSION=$(VERSION)
 
